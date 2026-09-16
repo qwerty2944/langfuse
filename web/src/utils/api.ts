@@ -33,7 +33,7 @@ export { isTrpcZodValidationError } from "@/src/utils/trpcValidationError";
 
 setUpSuperjson();
 
-const getBaseUrl = () => {
+export const getBaseUrl = () => {
   const hostname =
     typeof window !== "undefined"
       ? window.location.origin

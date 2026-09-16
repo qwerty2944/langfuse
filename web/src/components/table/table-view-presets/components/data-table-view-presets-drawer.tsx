@@ -53,7 +53,7 @@ import {
   DropdownMenuSeparator,
 } from "@/src/components/ui/dropdown-menu";
 import { DeleteButton } from "@/src/components/deleteButton";
-import { api } from "@/src/utils/api";
+import { api, getBaseUrl } from "@/src/utils/api";
 import {
   Popover,
   PopoverContent,
@@ -569,7 +569,8 @@ function TableViewPresetsDrawerContentBody({
         viewId,
         projectId,
         tableName,
-        baseUrl: window.location.origin,
+        // origin alone drops NEXT_PUBLIC_BASE_PATH; getBaseUrl() is origin + base path.
+        baseUrl: getBaseUrl(),
       });
     } else {
       showErrorToast(

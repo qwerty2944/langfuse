@@ -8,6 +8,7 @@ import {
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/utils/tailwind";
+import { getSafeRedirectPath } from "@/src/utils/redirect";
 import { FileCode } from "lucide-react";
 
 const PROMPT_REFERENCE_MARKDOWN_PREFIX = "/__langfuse_prompt_reference__?";
@@ -76,7 +77,8 @@ const getPromptReferenceUrl = (
   projectId: string,
   tag: ParsedPromptDependencyTag,
 ) => {
-  const baseUrl = `/project/${projectId}/prompts/`;
+  // window.open does not go through the Next.js router, so NEXT_PUBLIC_BASE_PATH has to be added here.
+  const baseUrl = getSafeRedirectPath(`/project/${projectId}/prompts/`);
   if (tag.type === "version") {
     return `${baseUrl}${encodeURIComponent(tag.name)}?version=${tag.version}`;
   }
