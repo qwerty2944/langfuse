@@ -8,6 +8,7 @@ import {
   getBillingCycleEnd,
   getBillingCycleStart,
   logger,
+  getProductBaseUrl,
 } from "@langfuse/shared/src/server";
 
 import { type BillingSubscriptionInfo } from "../stripe/stripeBillingService";
@@ -73,7 +74,10 @@ export class ChbBillingService {
   }
 
   private returnUrl(orgId: string) {
-    return `${env.NEXTAUTH_URL}/organization/${orgId}/settings/billing`;
+    return new URL(
+      `organization/${orgId}/settings/billing`,
+      getProductBaseUrl(),
+    ).toString();
   }
 
   private toUnixSeconds(value: string | null | undefined): number | null {

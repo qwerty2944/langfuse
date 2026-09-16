@@ -18,6 +18,7 @@ import {
   applyCommentFilters,
   type CommentObjectType,
   type PreferredClickhouseService,
+  getProductBaseUrl,
 } from "@langfuse/shared/src/server";
 import { env } from "../../env";
 import { getDatabaseReadStreamPaginated } from "../database-read-stream/getDatabaseReadStream";
@@ -314,7 +315,10 @@ export const handleBatchExportJob = async (
     // fresh download URL on click, while a URL signed with temporary
     // credentials (e.g. IAM role sessions) can die well before expiresAt.
     const exportsPageUrl = env.NEXTAUTH_URL
-      ? `${env.NEXTAUTH_URL}/project/${projectId}/settings/exports`
+      ? new URL(
+          `project/${projectId}/settings/exports`,
+          getProductBaseUrl(),
+        ).toString()
       : undefined;
 
     await sendBatchExportSuccessEmail({

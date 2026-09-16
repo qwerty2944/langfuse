@@ -3,6 +3,7 @@ import {
   logger,
   sendCommentMentionEmail,
   getObservationById,
+  getProductBaseUrl,
 } from "@langfuse/shared/src/server";
 import { prisma } from "@langfuse/shared/src/db";
 import { Prisma } from "@langfuse/shared";
@@ -182,8 +183,11 @@ export async function handleCommentMentionNotification(
           continue;
         }
 
-        // Construct comment link using NEXTAUTH_URL (which includes basePath if configured)
-        const baseUrl = env.NEXTAUTH_URL || "http://localhost:3000";
+        // NEXTAUTH_URL ends with `/api/auth` when a base path is configured (see the
+        // self-hosting docs); getProductBaseUrl() strips it and keeps the base path.
+        const baseUrl = env.NEXTAUTH_URL
+          ? getProductBaseUrl().toString().replace(/\/$/, "")
+          : "http://localhost:3000";
 
         // Construct URL based on object type
         const commentLink = await buildCommentLink({

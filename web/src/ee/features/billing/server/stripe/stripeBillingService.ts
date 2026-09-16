@@ -12,6 +12,7 @@ import {
   getBillingCycleEnd,
   instrumentAsync,
   traceException,
+  getProductBaseUrl,
 } from "@langfuse/shared/src/server";
 
 import {
@@ -584,7 +585,10 @@ class BillingService {
           const billingPortalSession =
             await client.billingPortal.sessions.create({
               customer: stripeCustomerId,
-              return_url: `${env.NEXTAUTH_URL}/organization/${orgId}/settings/billing`,
+              return_url: new URL(
+                `organization/${orgId}/settings/billing`,
+                getProductBaseUrl(),
+              ).toString(),
             });
 
           return billingPortalSession.url;
@@ -681,7 +685,10 @@ class BillingService {
           ];
         })();
 
-        const returnUrl = `${env.NEXTAUTH_URL}/organization/${orgId}/settings/billing`;
+        const returnUrl = new URL(
+          `organization/${orgId}/settings/billing`,
+          getProductBaseUrl(),
+        ).toString();
         const stripeCustomerId =
           parsedOrg.cloudConfig?.stripe?.customerId ?? undefined;
         const clientReferenceId = createStripeClientReference(orgId);

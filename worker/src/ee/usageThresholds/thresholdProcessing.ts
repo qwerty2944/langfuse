@@ -12,6 +12,7 @@ import {
   recordIncrement,
   traceException,
   getBillingCycleEnd,
+  getProductBaseUrl,
 } from "@langfuse/shared/src/server";
 import {
   NOTIFICATION_THRESHOLDS,
@@ -83,7 +84,10 @@ async function sendThresholdNotificationEmail(
     }
 
     // Generate billing URL
-    const billingUrl = `${env.NEXTAUTH_URL}/organization/${org.id}/settings/billing`;
+    const billingUrl = new URL(
+      `organization/${org.id}/settings/billing`,
+      getProductBaseUrl(),
+    ).toString();
 
     // Send email to each admin/owner
     const emailResults = await Promise.allSettled(
@@ -189,7 +193,10 @@ async function sendBlockingNotificationEmail(
     }
 
     // Generate billing URL
-    const billingUrl = `${env.NEXTAUTH_URL}/organization/${org.id}/settings/billing`;
+    const billingUrl = new URL(
+      `organization/${org.id}/settings/billing`,
+      getProductBaseUrl(),
+    ).toString();
 
     // Send email to each admin/owner
     const emailResults = await Promise.allSettled(
